@@ -28,6 +28,9 @@ Route::middleware('auth')->group(function () {
 
     // Peminjam Routes
     Route::resource('peminjam', PeminjamController::class);
+    
+
 });
+Route::get('/peminjam/{id}/cetak', [PeminjamController::class, 'cetakPdf'])->name('peminjam.cetak');
 
 require __DIR__.'/auth.php';

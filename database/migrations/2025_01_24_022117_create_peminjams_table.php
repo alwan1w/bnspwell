@@ -10,6 +10,7 @@ class CreatePeminjamsTable extends Migration
     {
         Schema::create('peminjams', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('buku_id');
             $table->string('nama');
             $table->string('email')->unique();
             $table->date('tanggal_lahir');
@@ -17,6 +18,8 @@ class CreatePeminjamsTable extends Migration
             $table->string('agama');
             $table->text('alamat');
             $table->timestamps();
+
+            $table->foreign('buku_id')->references('id')->on('buku')->onDelete('cascade');
         });
     }
 

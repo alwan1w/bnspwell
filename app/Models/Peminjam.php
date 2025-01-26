@@ -14,6 +14,7 @@ class Peminjam extends Model
 
     // Menentukan atribut yang dapat diisi secara massal (mass assignment)
     protected $fillable = [
+        'buku_id',
         'nama',           // Nama lengkap peminjam
         'email',          // Email peminjam
         'tanggal_lahir',  // Tanggal lahir peminjam
@@ -21,4 +22,9 @@ class Peminjam extends Model
         'agama',          // Agama peminjam
         'alamat',         // Alamat peminjam
     ];
+
+    public function buku()
+    {
+    return $this->belongsTo(Buku::class, 'buku_id');
+    }
 }

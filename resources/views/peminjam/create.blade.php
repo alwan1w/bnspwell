@@ -74,18 +74,11 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
-            <a class="navbar-brand" href="#">Menu</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" href="/penulis">Penulis</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/buku">Buku</a>
+                        <a class="nav-link" href="{{ route('dashboard') }}">Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/peminjam">Peminjam</a>
@@ -111,6 +104,22 @@
 
                         <form action="{{ route('peminjam.store') }}" method="POST">
                             @csrf
+
+                            <div class="form-group">
+                                <label for="buku"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Buku</label>
+                                <select id="buku" name="buku"
+                                    class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                    required>
+                                    <option value="" disabled selected>Pilih Buku</option>
+                                    @foreach ($buku as $d)
+                                        <option value="{{ $d->id }}" {{ old('buku') == $d->id ? 'selected' : '' }}>
+                                            {{ $d->judul }}
+                                            <!-- Pastikan ini sesuai dengan kolom nama buku di database -->
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <div class="mb-3">
                                 <label for="nama" class="form-label">Nama</label>
                                 <input type="text" name="nama" id="nama" class="form-control" placeholder="Masukkan nama Anda" required>

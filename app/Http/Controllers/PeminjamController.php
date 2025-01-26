@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Agama;
+use App\Models\Buku;
 use App\Models\Peminjam;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -12,35 +13,54 @@ class PeminjamController extends Controller
     // Menampilkan halaman form untuk menambahkan data peminjam
     public function index()
     {
-        // Mengambil semua data agama untuk digunakan dalam dropdown pada form
-        $agama = Agama::all();
+    // Mengambil semua data agama untuk dropdown agama
+    $agama = Agama::all();
 
-        // Mengarahkan ke view 'peminjam.create' dengan data agama
-        return view('peminjam.create', compact('agama'));
+    // Mengambil semua data buku untuk dropdown buku
+    $buku = Buku::all();
+
+    // Mengarahkan ke view 'peminjam.create' dengan data agama dan buku
+    return view('peminjam.create', compact('agama', 'buku'));
     }
+
+    public function create()
+    {
+        $agama = Agama::all();  // Ambil semua data agama
+        $buku = Buku::all();    // Ambil semua data buku
+
+        return view('peminjam.create', compact('agama', 'buku'));
+    }
+
 
     // Menyimpan data peminjam baru ke dalam database
     public function store(Request $request)
     {
+        $buku = Buku::all();
         // Validasi input dari form untuk memastikan data valid
         $request->validate([
-            'nama' => 'required|string|max:255',             // Nama wajib diisi, berupa string, maksimal 255 karakter
-            'email' => 'required|email|unique:peminjams,email', // Email harus valid, unik di tabel peminjams
-            'tanggal_lahir' => 'required|date',             // Tanggal lahir wajib berupa tanggal valid
-            'nomor_telepon' => 'required|string|max:15',    // Nomor telepon wajib, maksimal 15 karakter
-            'agama' => 'required|string',                   // Agama wajib diisi
-            'alamat' => 'required|string',                  // Alamat wajib diisi
+            'buku_id' => 'required|exists:buku,id',
+            'nama' => 'required|string|max:255',
+            'email' => 'required|email|unique:peminjams,email',
+            'tanggal_lahir' => 'required|date',
+            'nomor_telepon' => 'required|string|max:15',
+            'agama' => 'required|string',
+            'alamat' => 'required|string',
         ]);
 
         // Menyimpan data ke dalam tabel peminjams
-        $peminjam = Peminjam::create([
+        Peminjam::create([
             'nama' => $request->nama,
             'email' => $request->email,
             'tanggal_lahir' => $request->tanggal_lahir,
-            'nomor_telepon' => $request->nomor_telepon,
-            'agama' => $request->agama,
+            'no_hp' => $request->no_hp,
+            'id_agama' => $request->agama,
+            'buku_id' => $request->buku,
             'alamat' => $request->alamat,
         ]);
+
+
+        $buku = Buku::all(); // Ambil semua data buku
+        return view('peminjam.create', compact('buku'));
 
         // Redirect ke fungsi cetak PDF dengan ID peminjam
         return redirect()->route('peminjam.cetak', $peminjam->id);

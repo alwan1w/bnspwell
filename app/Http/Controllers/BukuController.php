@@ -26,6 +26,9 @@ class BukuController extends Controller
 
         // Mengarahkan ke view 'buku.create' dan mengirimkan data penulis
         return view('buku.create', compact('penulis'));
+
+        $buku = Buku::all(); // Ambil semua data buku
+        return view('peminjam.create', compact('buku'));
     }
 
     // Menyimpan data buku baru ke dalam database
